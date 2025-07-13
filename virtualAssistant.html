@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sam, My Virtual Assistant</title>
+  <link rel="shortcut icon" href="logo.jpg" type="image/x-icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Protest+Guerrilla&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #101010;
+      --nav-bg: #111;
+      --accent1: #2acbca;
+      --accent2: #ad3563;
+      --text: #fff;
+      --shadow: rgba(173, 53, 99, 0.5);
+      --radius: 8px;
+      --trans: 0.3s ease-out;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    nav {
+      background: var(--nav-bg);
+      padding: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px var(--shadow);
+    }
+    .nav-buttons { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+    .nav-btn {
+      background: linear-gradient(to right, var(--accent1), var(--accent2));
+      padding: .6rem 1.4rem;
+      border-radius: 999px;
+      color: var(--text);
+      font-weight: 600;
+      box-shadow: 0 0 8px var(--shadow);
+      transition: var(--trans);
+      text-decoration: none;
+    }
+    .nav-btn:hover { transform: scale(1.05); }
+
+    .container {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: 3rem 1rem;
+      gap: 2rem;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    #new-logo {
+      width: clamp(120px, 30%, 200px);
+      height: auto;
+      border-radius: var(--radius);
+      box-shadow: 0 0 20px var(--shadow);
+      cursor: pointer;
+      transition: var(--trans);
+    }
+    #new-logo:hover { transform: scale(1.02); }
+
+    h1 {
+      font-family: 'Protest Guerrilla', cursive;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      text-align: center;
+      word-wrap: break-word;
+    }
+    #name { color: var(--accent2); }
+    #va { color: var(--accent1); }
+
+    #btn {
+      background: linear-gradient(to right, var(--accent1), var(--accent2));
+      padding: .8rem 1.5rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      box-shadow: 0 4px 12px var(--shadow);
+      transition: var(--trans);
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      max-width: 100%;
+      width: fit-content;
+    }
+    #btn:hover { transform: scale(1.03); }
+
+    #voice {
+      width: 120px;
+      opacity: 0;
+      transition: opacity var(--trans);
+    }
+    .listening #voice {
+      opacity: 1;
+    }
+
+    #voice-visualizer {
+      display: none;
+      grid-auto-flow: column;
+      gap: 0.3rem;
+      height: 60px;
+      align-items: end;
+      margin-top: 1rem;
+    }
+    .listening #voice-visualizer { display: grid; }
+    #voice-visualizer span {
+      width: 8px;
+      background: var(--accent1);
+      animation: pulse 1s infinite ease-in-out;
+      border-radius: 4px;
+    }
+    #voice-visualizer span:nth-child(odd) { animation-delay: .1s; }
+    #voice-visualizer span:nth-child(even) { animation-delay: .3s; }
+    @keyframes pulse {
+      0%,100% { transform: scaleY(0.2); }
+      50% { transform: scaleY(1); }
+    }
+
+    #content {
+      font-size: 1.1rem;
+      text-align: center;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      padding: 0 1rem;
+    }
+
+    @media(max-width:600px) {
+      .container { padding: 2rem 1rem; }
+      #btn { font-size: 1rem; }
+      h1 { font-size: 1.5rem; }
+      nav { padding: .5rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="logo.html"><img src="Samarth Ghare.jpg" alt="Logo" style="height:50px;border-radius:8px;box-shadow:2px 2px 15px var(--shadow)"/></a>
+    <div class="nav-buttons">
+      <h2>Sam : Virtual Assistant</h2>
+      <a href="login.php" class="nav-btn">Login/register</a>
+
+    </div>
+  </nav>
+
+  <div class="container">
+    <img src="logo.jpg" alt="Cyberpunk Logo" id="new-logo"/>
+    <h1>I'm <span id="name">Sam</span>, <span id="va">Virtual Assistant</span></h1>
+    <img src="voice.gif" alt="voice" id="voice"/>
+    <div id="voice-visualizer">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <button id="btn"><img src="mic.svg" alt="mic" style="width:20px"/><span>Click to Talk to Me</span></button>
+    <p id="content">Press the button and speak...</p>
+  </div>
+
+  <script>
+    const btn = document.querySelector("#btn"),
+          voice = document.querySelector("#voice"),
+          vis = document.querySelector("#voice-visualizer"),
+          content = document.querySelector("#content"),
+          body = document.body;
+
+    function speak(text) {
+      const u = new SpeechSynthesisUtterance(text);
+      u.rate=u.pitch=u.volume=1;
+      u.lang="hi-GB";
+      speechSynthesis.speak(u);
+    }
+
+    function wishMe() {
+      const h = new Date().getHours();
+      speak(h<12?"Good Morning Sam":h<16?"Good Afternoon Sam":"Good Evening Sam");
+    }
+
+    let recognition;
+    try {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SR();
+    } catch {
+      alert("Speech Recognition not supported.");
+    }
+
+    if (recognition) {
+      recognition.onstart = () => { body.classList.add("listening"); content.innerText="Listening..."; };
+      recognition.onend   = () => { body.classList.remove("listening"); };
+      recognition.onerror = e => { body.classList.remove("listening"); content.innerText="Error:"+e.error; speak("Sorry, I couldn't hear you."); };
+      recognition.onresult = e => {
+        const t = e.results[0][0].transcript.toLowerCase();
+        content.innerText = t;
+        takeCommand(t);
+      };
+      btn.addEventListener("click", () => recognition.start());
+    }
+
+    function takeCommand(m) {
+      if (/(hello|hey)/.test(m)) speak("Hello Sam, what can I help you with?");
+      else if (m.includes("who are you")) speak("I am Sam, your virtual assistant made by Samarth Suresh Ghare.");
+      else if (m.includes("open ")) {
+        const site = m.match(/open (\w+)/)[1];
+        const urls = { youtube:"https://youtube.com", google:"https://google.com", whatsapp:"https://web.whatsapp.com", facebook:"https://facebook.com", instagram:"https://instagram.com" };
+        if (urls[site]) { speak(`Opening ${site}`); window.open(urls[site], "_blank"); }
+      } else if (m.includes("time")) speak("Current time is "+new Date().toLocaleTimeString());
+      else if (m.includes("date")) speak("Today's date is "+new Date().toLocaleDateString());
+      else {
+        speak("This is what I found on the internet regarding "+m.replace("sam",""));
+        window.open("https://www.google.com/search?q="+encodeURIComponent(m.replace("sam","")), "_blank");
+      }
+    }
+
+    wishMe();
+  </script>
+</body>
+</html>

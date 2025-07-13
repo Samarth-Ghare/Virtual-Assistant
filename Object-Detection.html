@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Object Detection</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: white;
+      text-align: center;
+    }
+    h1 {
+      color: #4deeea;
+      margin-top: 20px;
+    }
+    video, canvas {
+      border: 2px solid #4deeea;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    #captureBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      background: linear-gradient(to right, #43a2b2, #c4248f);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #c4248f;
+    }
+    #captureBtn:hover {
+      background: linear-gradient(to right, #c4248f, #43a2b2);
+    }
+  </style>
+</head>
+<body>
+  <h1>🎯 Real-time AI Object Detection</h1>
+  <video id="video" width="640" height="480" autoplay muted></video>
+  <canvas id="canvas" width="640" height="480"></canvas>
+  <br />
+  <button id="captureBtn">📸 Capture Screenshot</button>
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const captureBtn = document.getElementById('captureBtn');
+
+    async function setupCamera() {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: false
+      });
+      video.srcObject = stream;
+      return new Promise(resolve => {
+        video.onloadedmetadata = () => {
+          resolve(video);
+        };
+      });
+    }
+
+    async function main() {
+      await setupCamera();
+      video.play();
+
+      const model = await cocoSsd.load();
+
+      requestAnimationFrame(detectFrame);
+
+      async function detectFrame() {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const predictions = await model.detect(video);
+
+        predictions.forEach(prediction => {
+          ctx.beginPath();
+          ctx.rect(...prediction.bbox);
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = 'lime';
+          ctx.fillStyle = 'lime';
+          ctx.stroke();
+          ctx.fillText(
+            `${prediction.class} (${Math.round(prediction.score * 100)}%)`,
+            prediction.bbox[0],
+            prediction.bbox[1] > 10 ? prediction.bbox[1] - 5 : 10
+          );
+        });
+
+        requestAnimationFrame(detectFrame);
+      }
+
+      captureBtn.addEventListener('click', () => {
+        const link = document.createElement('a');
+        link.download = 'screenshot.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+
+    main();
+  </script>
+</body>
+</html>

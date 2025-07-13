@@ -1,0 +1,75 @@
+'''def triangle():
+  height = float(input('Enter Height:'))
+  base = float(input('Enter Base:'))
+  area_t = 0.5 * base * height
+  print(area_t)
+triangle()
+
+def rectangle():
+  side1 = float(input('Enter Side 1:'))
+  side2 = float(input('Enter side 2:'))
+  area_r = side1 * side2
+  print(area_r)
+rectangle()
+
+def square():
+  side = float(input('Enter side:'))
+  square = side * side
+  print(square)
+square()
+
+def circle():
+  radius = float(input('Enter radius:'))
+  pi = 3.14
+  area_c = pi * radius**2
+  print(area_c)
+circle()
+
+
+list1 = [1,2,3,4,5]
+list2 = [3,4,5,6,7,8]
+print(list(set( list1 + list2 )))
+
+print(list(set(list1).intersection(set(list2))))
+
+a = set(list1)
+b = set(list2)
+print(a & b)
+
+list1 = []
+print('Enter elements of list1:')
+list1 = input().split()
+list2 = []
+list3 = []
+occ = int(input('Enter occurrence you want to delete:'))
+item = input('Enter word you want to delete:')
+i = 0
+count = 0
+for i in list1:
+  if i == item:
+    count+=1
+    if count==occ:
+      list2.append(i)
+    else:
+      list3.append(i)
+  else:
+    list3.append(i)
+print('Deleted items are:',list2)
+print('updated list is :',list3)
+
+string = input('Enter a string:')
+countword = input('Enter a word:')
+count = 0
+list = string.split()
+for word in list:
+  if word == countword:
+    count+=1
+print('The word {} appears {} times in given string'.format(countword,count))
+'''
+
+string1 = input("Enter a string:")
+word = input('substring to find in string:')
+if word in string1:
+  print('Yes,Its Present')
+else:
+  print('It is Not present') 

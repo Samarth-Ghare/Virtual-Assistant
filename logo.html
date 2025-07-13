@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Logo</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0f0f0f;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    a#logo-link {
+      text-decoration: none;
+    }
+
+    #new-logo {
+      width: 200px;
+      height: auto;
+      border-radius: 12px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+    }
+
+    #new-logo:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.9);
+    }
+  </style>
+</head>
+<body>
+
+  <a href="newpage.html" id="logo-link">
+    <img src="Samarth Ghare.jpg" alt="Cyberpunk Logo" id="new-logo">
+  </a>
+
+</body>
+</html>
